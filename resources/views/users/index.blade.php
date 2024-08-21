@@ -244,14 +244,10 @@
                         $('#usersTable').DataTable();
                     },
                     error: function() {
-                        $.Toast("Error", "Unable to load user data", {
-                            position_class: "toast-top-right",
-                            icon: "error"
-                        });
+                       $.Toast("Error", "Unable to load user data", "error", toastoptions);
                     }
                 });
             }
-
             addUserToTable();
         });
     </script>
