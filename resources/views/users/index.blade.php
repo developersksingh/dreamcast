@@ -23,7 +23,7 @@
                             <div class="row">
 
                                 <div class="card-header">
-                                    <h2 class="text-center">User Registration</h2>
+                                    <h2 class="text-center">Dreamcast User Registration</h2>
                                 </div>
 
                                 <div class="col-md-6">
