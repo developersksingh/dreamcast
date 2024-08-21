@@ -6,45 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>User Management</title>
-    <link href="{{ asset('frontend/css/bootstrap.min.css') }}"  rel="stylesheet">
+    <link href="{{ asset('frontend/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/css/dataTables.min.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('frontend/css/toast.style.min.css') }}" rel="stylesheet">
 </head>
 
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-12">
+
                 <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-center">User Registration</h2>
 
-                        <div class="alert alert-success alert-dismissible fade" role="alert" id="success-alert">
-                            <strong>Record Saved Successfully!</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-
-                        <div class="alert alert-danger alert-dismissible fade" role="alert" id="error-alert">
-                            <strong>Some technical error!</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
                     <div class="card-body">
                         <form id="userForm" enctype="multipart/form-data">
                             <div class="row">
+
+                                <div class="card-header">
+                                    <h2 class="text-center">User Registration</h2>
+                                </div>
+
                                 <div class="col-md-6">
                                     <label for="name" class="form-label">Name</label>
-                                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}">
+                                    <input type="text" id="name" name="name" class="form-control"
+                                        value="{{ old('name') }}">
                                     <div class="text-danger"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}">
+                                    <input type="email" id="email" name="email" class="form-control"
+                                        value="{{ old('email') }}">
                                     <div class="text-danger"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" id="phone" name="phone" class="form-control" value="{{ old('phone') }}">
+                                    <input type="text" id="phone" name="phone" class="form-control"
+                                        value="{{ old('phone') }}">
                                     <div class="text-danger"></div>
                                 </div>
                                 <div class="col-md-6">
@@ -59,7 +56,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label for="profile_image" class="form-label">Profile Image</label>
-                                    <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+                                    <input type="file" class="form-control" id="profile_image" name="profile_image"
+                                        accept="image/*">
                                     <div class="text-danger"></div>
                                 </div>
                                 <div class="col-md-12">
@@ -92,29 +90,61 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Table rows will be populated here by AJAX -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script src="{{ asset('frontend/js/jquery-3.6.0.min.js')}}"></script>
-    <script src="{{ asset('frontend/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{ asset('frontend/js/dataTables.min.js')}}"></script>
-
-
+    <script src="{{ asset('frontend/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/dataTables.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/toast.script.js') }}"></script>
     <script>
         $(document).ready(function() {
+            const toastoptions = {
 
-            const validationRules = {
-                name: { required: true, message: 'Please enter your name' },
-                email: { required: true, message: 'Please enter a valid email address' },
-                phone: { required: true, message: 'Please enter a valid indian phone number' },
-                role_id: { required: true, message: 'Please select a role' },
-                profile_image: { required: true, maxSize: 2048, allowedTypes: ['image/jpeg', 'image/png'], message: 'Please select a valid image (max 2 MB)' },
-                description: { required: true, message: 'Please enter a description' }
+                stack: true,
+                position_class: "toast-top-right",
+                fullscreen: false,
+                width: 250,
+                spacing: 20,
+                timeout: 4000,
+                has_close_btn: true,
+                has_icon: false,
+                sticky: false,
+                border_radius: 6,
+                has_progress: true,
+                rtl: false
             };
 
+            const validationRules = {
+                name: {
+                    required: true,
+                    message: 'Please enter your name'
+                },
+                email: {
+                    required: true,
+                    message: 'Please enter a valid email address'
+                },
+                phone: {
+                    required: true,
+                    message: 'Please enter a valid Indian phone number'
+                },
+                role_id: {
+                    required: true,
+                    message: 'Please select a role'
+                },
+                profile_image: {
+                    required: true,
+                    maxSize: 2048,
+                    allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'],
+                    message: 'Please select a valid image (max size 2 MB)'
+                },
+                description: {
+                    required: true,
+                    message: 'Please enter a description'
+                }
+            };
 
             function validateImage(file) {
                 if (!file) return true;
@@ -123,10 +153,8 @@
                 return true;
             }
 
-
             function validateForm() {
                 let isValid = true;
-
                 $.each(validationRules, function(field, rule) {
                     const $input = $(`[name=${field}]`);
                     const $errorElement = $input.next('.text-danger');
@@ -141,10 +169,8 @@
                         $errorElement.text('');
                     }
                 });
-
                 return isValid;
             }
-
 
             $('#userForm').on('submit', function(e) {
                 e.preventDefault();
@@ -162,40 +188,34 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function() {
-                            $('#success-alert').addClass('show');
-                            setTimeout(function() {
-                            $('#success-alert').fadeOut('slow');
-                                 $('#success-alert').removeClass('show');
-                            }, 3000);
+                            $.Toast("Success", "user created successfully", "success",
+                                toastoptions);
+
                             $('#userForm')[0].reset();
-                            addUserToTable(); // Refresh the table
+                            addUserToTable();
                         },
                         error: function(xhr) {
-                            $('.text-danger').text(''); // Clear errors
+                            $('.text-danger').text('');
 
                             if (xhr.responseJSON && xhr.responseJSON.errors) {
                                 const errors = xhr.responseJSON.errors;
                                 $.each(errors, function(field, messages) {
-                                    $(`[name=${field}]`).next('.text-danger').text(messages[0]);
+                                    $(`[name=${field}]`).next('.text-danger').text(
+                                        messages[0]);
                                 });
                             } else {
-
-                                $('#error-alert').addClass('show');
-                                setTimeout(function() {
-                                $('#error-alert').fadeOut('slow');
-                                    $('#error-alert').removeClass('show');
-                                }, 5000);
+                                $.Toast("Error", "An error occurred", "error", toastoptions);
                             }
                         }
                     });
                 }
             });
 
-
             $('#reset_btn').on('click', function() {
                 $('#userForm')[0].reset();
                 $('.text-danger').text('');
             });
+
             function addUserToTable() {
                 $.ajax({
                     url: '{{ route('users.data') }}',
@@ -205,31 +225,38 @@
                         usersTableBody.empty();
 
                         $.each(response, function(index, user) {
-                            const imageUrl = user.profile_image ? `{{ asset('storage') }}/${user.profile_image}` : '';
-                            const imageTag = imageUrl ? `<img src="${imageUrl}" alt="Profile Image" width="50" class="img-thumbnail">` : `<img src="" alt="Profile Image" width="50" class="img-thumbnail" style="display:none;">`;
-                            new DataTable('#usersTable');
-                            const row = [
-                                imageTag,
-                                user.name,
-                                user.email,
-                                user.phone,
-                                user.description,
-                                user.role.name
-                            ];
-                            $('#usersTable').DataTable().row.add(row).draw();
+                            const imageUrl = user.profile_image ?
+                                `{{ asset('storage') }}/${user.profile_image}` : '';
+                            const imageTag = imageUrl ?
+                                `<img src="${imageUrl}" alt="Profile Image" width="50" class="img-thumbnail">` :
+                                `<img src="" alt="Profile Image" width="50" class="img-thumbnail" style="display:none;">`;
+
+                            const row = `<tr>
+                                <td>${imageTag}</td>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                                <td>${user.phone}</td>
+                                <td>${user.description}</td>
+                                <td>${user.role.name}</td>
+                            </tr>`;
+
+                            usersTableBody.append(row);
                         });
+
+                        $('#usersTable').DataTable();
                     },
                     error: function() {
-                        $('#error-alert').addClass('show');
-                                setTimeout(function() {
-                                $('#error-alert').fadeOut('slow');
-                                    $('#error-alert').removeClass('show');
-                                }, 5000);
+                        $.Toast("Error", "Unable to load user data", {
+                            position_class: "toast-top-right",
+                            icon: "error"
+                        });
                     }
                 });
             }
+
             addUserToTable();
         });
     </script>
 </body>
+
 </html>

@@ -15,4 +15,9 @@ class User extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
 }
