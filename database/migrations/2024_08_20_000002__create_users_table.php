@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->unsignedBigInteger('role_id');
-            $table->string('profile_image')->nullable();
+            $table->string('profile_image');
             $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles');

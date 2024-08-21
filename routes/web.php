@@ -14,6 +14,8 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [UserController::class, 'index'])->name('users.index');
-Route::post('/create-user', [UserController::class, 'store'])->name('users.store');
-Route::get('/users-data', [UserController::class, 'getUsersData'])->name('users.data');
+Route::controller(UserController::class)->group(function () {
+    Route::get('/', 'index')->name('users.index');
+    Route::post('/create-user', 'store')->name('users.store');
+    Route::get('/users-data', 'getUsersData')->name('users.data');
+});

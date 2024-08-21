@@ -38,13 +38,13 @@
                                         value="{{ old('email') }}">
                                     <div class="text-danger"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="phone" class="form-label">Phone</label>
                                     <input type="text" id="phone" name="phone" class="form-control"
                                         value="{{ old('phone') }}">
                                     <div class="text-danger"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="role_id" class="form-label">Role</label>
                                     <select class="form-select" id="role_id" name="role_id">
                                         <option value="">Select a role</option>
@@ -54,7 +54,7 @@
                                     </select>
                                     <div class="text-danger"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="profile_image" class="form-label">Profile Image</label>
                                     <input type="file" class="form-control" id="profile_image" name="profile_image"
                                         accept="image/*">
@@ -136,9 +136,8 @@
                 },
                 profile_image: {
                     required: true,
-                    maxSize: 2048,
                     allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'],
-                    message: 'Please select a valid image (max size 2 MB)'
+                    message: 'Please select a valid image file in (jpeg,jpg,png,gif) format only'
                 },
                 description: {
                     required: true,
@@ -148,7 +147,6 @@
 
             function validateImage(file) {
                 if (!file) return true;
-                if (file.size > validationRules.profile_image.maxSize * 1024) return false;
                 if (!validationRules.profile_image.allowedTypes.includes(file.type)) return false;
                 return true;
             }
