@@ -102,7 +102,6 @@
     <script>
         $(document).ready(function() {
             const toastoptions = {
-
                 stack: true,
                 position_class: "toast-top-right",
                 fullscreen: false,
@@ -145,10 +144,14 @@
                 }
             };
 
+            function validateIndianPhoneNumber(phone) {
+                const cleanPhone = phone.replace(/\D/g, '');
+                return cleanPhone.length === 10 && /^[6-9]\d{9}$/.test(cleanPhone);
+            }
+
             function validateImage(file) {
                 if (!file) return true;
-                if (!validationRules.profile_image.allowedTypes.includes(file.type)) return false;
-                return true;
+                return validationRules.profile_image.allowedTypes.includes(file.type);
             }
 
             function validateForm() {
@@ -156,8 +159,12 @@
                 $.each(validationRules, function(field, rule) {
                     const $input = $(`[name=${field}]`);
                     const $errorElement = $input.next('.text-danger');
+                    let value = $input.val().trim();
 
-                    if (rule.required && !$input.val().trim()) {
+                    if (rule.required && !value) {
+                        isValid = false;
+                        $errorElement.text(rule.message);
+                    } else if (field === 'phone' && !validateIndianPhoneNumber(value)) {
                         isValid = false;
                         $errorElement.text(rule.message);
                     } else if (field === 'profile_image' && !validateImage($input[0].files[0])) {
@@ -186,9 +193,8 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function() {
-                            $.Toast("Success", "user created successfully", "success",
+                            $.Toast("Success", "User created successfully", "success",
                                 toastoptions);
-
                             $('#userForm')[0].reset();
                             addUserToTable();
                         },
@@ -230,24 +236,24 @@
                                 `<img src="" alt="Profile Image" width="50" class="img-thumbnail" style="display:none;">`;
 
                             const row = `<tr>
-                                <td>${imageTag}</td>
-                                <td>${user.name}</td>
-                                <td>${user.email}</td>
-                                <td>${user.phone}</td>
-                                <td>${user.description}</td>
-                                <td>${user.role.name}</td>
-                            </tr>`;
-
-                            usersTableBody.append(row);
+                        <td>${imageTag}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.description}</td>
+                        <td>${user.role.name}</td>
+                    </tr>`;
+                        usersTableBody.append(row);
                         });
 
                         $('#usersTable').DataTable();
                     },
                     error: function() {
-                       $.Toast("Error", "Unable to load user data", "error", toastoptions);
+                        $.Toast("Error", "Unable to load user data", "error", toastoptions);
                     }
                 });
             }
+
             addUserToTable();
         });
     </script>
